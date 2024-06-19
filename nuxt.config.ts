@@ -2,6 +2,9 @@ import { pwa } from './config/pwa'
 import { appDescription } from './constants/index'
 
 export default defineNuxtConfig({
+  devServer: {
+    port: 3333,
+  },
   modules: [
     '@vueuse/nuxt',
     '@unocss/nuxt',
@@ -9,6 +12,7 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     '@vite-pwa/nuxt',
     '@nuxt/eslint',
+    '@nuxt/ui',
   ],
 
   experimental: {
@@ -19,14 +23,15 @@ export default defineNuxtConfig({
     typedPages: true,
   },
 
-  css: [
-    '@unocss/reset/tailwind.css',
-  ],
+  // css: [
+  //   '@unocss/reset/tailwind.css',
+  // ],
+
+  css: ['~/assets/css/main.css'],
 
   colorMode: {
     classSuffix: '',
   },
-
   nitro: {
     esbuild: {
       options: {
@@ -39,7 +44,6 @@ export default defineNuxtConfig({
       ignore: ['/hi'],
     },
   },
-
   app: {
     head: {
       viewport: 'width=device-width,initial-scale=1',
@@ -60,6 +64,12 @@ export default defineNuxtConfig({
 
   pwa,
 
+  postcss: {
+    plugins: {
+      tailwindcss: {},
+      autoprefixer: {},
+    },
+  },
   devtools: {
     enabled: true,
   },

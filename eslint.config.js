@@ -7,6 +7,9 @@ export default nuxt(
     {
       unocss: true,
       formatters: true,
+      rules: {
+        'no-console': 'off', // 允许使用 console
+      },
     },
   ),
 )
