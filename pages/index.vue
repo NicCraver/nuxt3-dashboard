@@ -4,6 +4,6 @@
 
 <template>
   <div>
-    <Logos class="mb-6" />
+    <Logos mb-6 />
   </div>
 </template>
