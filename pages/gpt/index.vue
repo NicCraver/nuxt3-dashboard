@@ -6,9 +6,10 @@ import type { GPTUser } from '~/types/api'
 // 表单抽屉
 const { isOpen, close, setFormData, formData } = useFormSlideover()
 
-const { getAllUsers,
-  //  getUserById, createUser, updateUser, deleteUser
-} = useFetchUser()
+// const {
+//   getAllUsers,
+//   //  getUserById, createUser, updateUser, deleteUser
+// } = useFetchUser()
 
 const columns = [
   {
@@ -40,7 +41,7 @@ const columns = [
   },
 ]
 
-const people = ref<GPTUser[]>([])
+const people = ref<any>([])
 
 function test(row: any) {
   isOpen.value = true
@@ -52,25 +53,31 @@ function updatePerson(id: any, key: any, value: any) {
   if (person)
     person[key] = value
 }
-function getTableData() {
-  getAllUsers()
-    .then((res: any) => {
-      // console.log(`res`, JSON.stringify(res))
-      people.value = res
+async function getTableData() {
+  // getAllUsers()
+  //   .then((res: any) => {
+  //     // console.log(`res`, JSON.stringify(res))
+  //     people.value = res
 
-      useToast().add({ title: '查询成功！' })
-    })
+  //     useToast().add({ title: '查询成功！' })
+  //   })
+  try {
+    const { data } = await useFetch('/api/gpt-user')
+    people.value = data.value
+  }
+  catch (error) {
+    console.log(`error`, error)
+  }
 }
 
-const { data } = await useFetch('/api/gpt-user')
 // watchEffect(() => {
 //   console.log(`data`, data.value,
 //   )
 // })
 onMounted(async () => {
-  console.log(`data.value`, data.value)
-  people.value = data.value
-  // getTableData()
+  // console.log(`data.value`, data.value)
+  // people.value = data.value
+  getTableData()
 })
 
 const usedMsg = computed(() => {
