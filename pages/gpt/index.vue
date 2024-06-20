@@ -3,7 +3,6 @@ import { useFormSlideover } from './hooks/useFormSlideover'
 import FormSlideover from './components/FormSlideover.vue'
 import type { GPTUser } from '~/types/api'
 
-
 // 表单抽屉
 const { isOpen, close, setFormData, formData } = useFormSlideover()
 
@@ -56,33 +55,38 @@ function updatePerson(id: any, key: any, value: any) {
 function getTableData() {
   getAllUsers()
     .then((res: any) => {
-      console.log(`res`, JSON.stringify(res))
+      // console.log(`res`, JSON.stringify(res))
       people.value = res
 
       useToast().add({ title: '查询成功！' })
     })
 }
 
-onMounted(() => {
-  getTableData()
+const { data } = await useFetch('/api/gpt-user')
+// watchEffect(() => {
+//   console.log(`data`, data.value,
+//   )
+// })
+onMounted(async () => {
+  console.log(`data.value`, data.value)
+  people.value = data.value
+  // getTableData()
 })
 
 const usedMsg = computed(() => {
-  people.value.filter((p: any) => p.state === 'used').length
+  // people.value.filter((p: any) => p.state === 'used').length
   return `已使用：${people.value.filter((p: any) => p.state === '已发').length}`
 })
 
 const surplusMsg = computed(() => {
-  people.value.filter((p: any) => p.state === 'surplus').length
+  // people.value.filter((p: any) => p.state === 'surplus').length
   return `剩余：${people.value.filter((p: any) => p.state === '未发').length}`
 })
-
-
 </script>
 
 <template>
   <div>
-    <UAlert class="mb-4" :title="usedMsg + ' ' + surplusMsg" />
+    <UAlert class="mb-4" :title="`${usedMsg} ${surplusMsg}`" />
     <UDivider />
     <UTable :rows="people" :columns="columns">
       <template #name-data="{ row }">
@@ -101,7 +105,7 @@ const surplusMsg = computed(() => {
     </UTable>
 
     <USlideover v-model="isOpen">
-      <FormSlideover :formData="formData" :close="close" :getTableData="getTableData" />
+      <FormSlideover :form-data="formData" :close="close" :get-table-data="getTableData" />
     </USlideover>
   </div>
 </template>
