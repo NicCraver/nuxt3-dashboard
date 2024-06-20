@@ -21,7 +21,13 @@ export async function getUser() {
     console.log(`userList`, userList)
     return userList
   }
-  catch (ex) {
-    return null
+  catch (error: any) {
+    console.error(`error`, error)
+    // return null
+    return createError({
+      statusCode: 500,
+      statusMessage: 'Internal Server Error',
+      data: { message: error.message },
+    })
   }
 }
