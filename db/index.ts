@@ -12,7 +12,7 @@ function createPrismaClient() {
 const globalForPrisma = globalThis as unknown as {
   prisma: ReturnType<typeof createPrismaClient> | undefined
 }
-console.log(` import.meta.env.MODE `, import.meta.env.MODE)
+
 export const db = globalForPrisma.prisma ?? createPrismaClient()
 
 if (import.meta.env.MODE !== 'production')

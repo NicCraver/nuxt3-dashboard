@@ -1,31 +1,25 @@
 <script setup lang="ts">
-import type { _padding } from "#tailwind-config/theme";
-
-// const route = useRoute()
-
 const links = [
-  // {
-  //   label: 'Profile',
-  //   avatar: {
-  //     src: 'https://avatars.githubusercontent.com/u/739984?v=4',
-  //   },
-  //   badge: 100,
-  // },
-  {
-    label: "Home",
-    icon: "i-heroicons-home",
-    to: "/",
-  },
   {
     label: "GPT账号",
-    icon: "i-heroicons-chart-bar",
+    icon: "i-heroicons-home",
     to: "/gpt",
   },
   {
     label: "RedeemCode兑换码",
-    icon: "i-heroicons-command-line",
+    icon: "i-heroicons-home",
     to: "/redeemcode",
   },
+  // {
+  //   label: 'Vertical Navigation',
+  //   icon: 'i-heroicons-chart-bar',
+  //   to: `${route.path.startsWith('/dev') ? '/dev' : ''}/components/vertical-navigation`,
+  // },
+  // {
+  //   label: 'Command Palette',
+  //   icon: 'i-heroicons-command-line',
+  //   to: '/components/command-palette',
+  // },
 ];
 const teams = [
   {
@@ -64,13 +58,13 @@ const team = ref(teams[0]);
 <template>
   <div class="fixed inset-0 flex overflow-hidden">
     <article
-      class="relative flex-shrink-0 flex-col items-stretch border-gray-200 w-[255px] flex border-b-0 border-r dark:border-gray-800"
+      class="relative hidden flex-shrink-0 flex-col items-stretch border-b border-gray-200 lg:w-[255px] lg:flex lg:border-b-0 lg:border-r dark:border-gray-800"
     >
       <div
         class="h-[64px] min-w-0 flex flex-shrink-0 items-center gap-x-4 border-b border-gray-200 px-4 !border-transparent dark:border-gray-800"
       >
         <div class="min-w-0 flex flex-1 items-center justify-between gap-x-1.5">
-          <TeamsDropdown />
+          <slot name="sidebar" />
         </div>
       </div>
       <div class="flex flex-1 flex-col gap-y-2 overflow-y-auto px-4">
@@ -91,13 +85,6 @@ const team = ref(teams[0]);
       </main>
     </div>
   </div>
-  <!-- <main class="px-10 py-20 text-center">
-    <slot />
-
-    <div class="mx-auto mt-5 text-center text-sm opacity-25">
-      [Default Layout]
-    </div>
-  </main> -->
 </template>
 
 <style scoped></style>

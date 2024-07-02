@@ -1,8 +1,5 @@
-import { PrismaClient } from '@prisma/client'
+import prisma from '~/lib/prisma';
 import { defineEventHandler, getQuery, readBody } from 'h3'
-import { format } from 'date-fns'
-
-const prisma = new PrismaClient()
 
 export default defineEventHandler(async (event) => {
   const method = event.req.method

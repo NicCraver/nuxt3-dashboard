@@ -1,17 +1,18 @@
 <script setup lang="ts">
-import { z } from 'zod'
-import type { FormSubmitEvent } from '#ui/types'
-import type { GPTUser } from '~/types/api'
+import { z } from "zod";
+import { useClipboard } from "@vueuse/core";
+import type { FormSubmitEvent } from "#ui/types";
+import type { GPTUser } from "~/types";
 
 const props = defineProps<{
-  close: () => void
-  getTableData: () => void
-  formData: GPTUser
-}>()
+  close: () => void;
+  fetchData: () => void;
+  formData: GPTUser | null;
+}>();
 
-const { updateUser } = useFetchUser()
+// const { updateUser } = useFetchUser()
 
-const source = ref(
+const copywriting1 = ref(
   `
   不回答任何疑问哦。由于私信次数有限，每人账号只发一次账号，不够用的和想续费的（返现10%，仅限B站）
 
@@ -28,79 +29,116 @@ s
   用下面的账号密码登录我的网站可体验1天（登录后开始计时，24小时后到期）
 
   账号----密码
-  `,
-)
+  `
+);
 
-const { copy } = useClipboard({ source })
-const toast = useToast()
+const copywriting2 = ref(
+  `
+  登录地址：https://plus.zhiyunai168.com（优先使用谷歌浏览器）
+
+  gpt提示词库 gpts热门推荐‍，网站的详细说明：https://chatdoc.nextdev.cc/guide/guide.html
+
+  账号----密码
+  `
+);
+
+const { copy } = useClipboard({ source: copywriting1 });
+const { copy: copy2 } = useClipboard({ source: copywriting2 });
+const toast = useToast();
 const schema = z.object({
-  name: z.string().min(1, '请填写名称'),
-  type: z.string().min(1, '请填写类型'),
-  state: z.string().min(1, '请填写状态'),
-  id: z.string().min(1, '请填写ID'),
-  account: z.string().min(1, '请填写账号'),
-  password: z.string().min(1, '请填写密码'),
-})
+  name: z.string().min(1, "请填写名称"),
+  type: z.string().min(1, "请填写类型"),
+  state: z.string().min(1, "请填写状态"),
+  id: z.string().min(1, "请填写ID"),
+  account: z.string().min(1, "请填写账号"),
+  password: z.string().min(1, "请填写密码"),
+});
 
-type Schema = z.output<typeof schema>
+type Schema = z.output<typeof schema>;
 
 const state = ref<GPTUser>({
-  id: '',
-  name: '',
-  account: '',
-  password: '',
-  type: '',
-  state: '',
-})
+  id: "",
+  name: "",
+  account: "",
+  password: "",
+  type: "",
+  state: "",
+});
 
-const stateOptions = ref(['已发', '未发'])
-const typeOptions = ref(['微信', 'B站'])
+const stateOptions = ref(["已发", "未发"]);
+const typeOptions = ref(["微信", "B站"]);
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  console.log(event.data)
-  updateUser(event.data).then((res) => {
-    console.log(`res`, res)
-    props.close()
-    props.getTableData()
-    toast.add({ title: '提交成功！' })
-  }).catch((err) => {
-    console.log(err)
-  })
+  console.log(event.data);
+  // updateUser(event.data).then((res) => {
+  //   console.log(`res`, res)
+  //   props.close()
+  //   props.getTableData()
+  //   toast.add({ title: '提交成功！' })
+  // }).catch((err) => {
+  //   console.log(err)
+  // })
 }
 
 function onCopy() {
   copy().then(() => {
-    toast.add({ title: '复制成功！' })
-  })
+    toast.add({ title: "复制成功！" });
+  });
+  // toast.add({ title: 'Hello world!' })
+}
+function onCopy2() {
+  copy2().then(() => {
+    toast.add({ title: "复制成功！" });
+  });
   // toast.add({ title: 'Hello world!' })
 }
 
 onMounted(() => {
-  state.value = JSON.parse(JSON.stringify(props.formData))
-  state.value.name = ''
-  state.value.type = 'B站'
-  state.value.state = '已发'
-  source.value = `${source.value}
+  state.value = JSON.parse(JSON.stringify(props.formData));
+  state.value.name = "";
+  state.value.type = "微信";
+  state.value.state = "已发";
+  copywriting1.value = `${copywriting1.value}
   ${state.value.account}---${state.value.password}
-  `
-})
+  `;
+  copywriting2.value = `${copywriting2.value}
+  ${state.value.account}---${state.value.password}
+  `;
+});
 </script>
 
 <template>
   <UCard
     class="flex flex-1 flex-col"
-    :ui="{ body: { base: 'flex-1' }, ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }"
+    :ui="{
+      body: { base: 'flex-1' },
+      ring: '',
+      divide: 'divide-y divide-gray-100 dark:divide-gray-800',
+    }"
   >
     <template #header>
       <div class="flex items-center justify-between">
-        <h3 class="text-base text-gray-900 font-semibold leading-6 dark:text-white">
+        <h3
+          class="text-base text-gray-900 font-semibold leading-6 dark:text-white"
+        >
           Slideover
         </h3>
-        <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="close" />
+        <UButton
+          color="gray"
+          variant="ghost"
+          icon="i-heroicons-x-mark-20-solid"
+          class="-my-1"
+          @click="close"
+        />
       </div>
     </template>
     <div class="h-full">
-      <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
+      <UForm
+        :schema="schema"
+        :state="state"
+        class="space-y-4"
+        @submit="onSubmit"
+      >
         <UFormGroup label="ID" name="id">
           <UInput v-model="state.id" disabled />
         </UFormGroup>
@@ -123,17 +161,10 @@ onMounted(() => {
         </UFormGroup>
 
         <div>
-          {{ source }}
+          <UButton @click="onCopy"> 复制B站文案 </UButton>
+          <UButton ml-4 @click="onCopy2"> 复制朋友文案 </UButton>
         </div>
-
-        <div>
-          <UButton @click="onCopy">
-            复制
-          </UButton>
-        </div>
-        <UButton type="submit">
-          Submit
-        </UButton>
+        <UButton type="submit"> Submit </UButton>
       </UForm>
     </div>
   </UCard>

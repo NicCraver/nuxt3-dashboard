@@ -1,19 +1,20 @@
 <script setup lang="ts">
-import { appName } from '~/constants'
 
 useHead({
-  title: appName,
+  title: 'Nuxt 3',
 })
 </script>
 
 <template>
-  <NuxtLoadingIndicator />
-  <VitePwaManifest />
+  <div>
+    <NuxtRouteAnnouncer />
+    <!-- <NuxtWelcome /> -->
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
 
-  <!-- <NuxtLoadingIndicator /> -->
-  <NuxtLayout>
-    <NuxtPage />
-  </NuxtLayout>
+    <UNotifications :ui="{ position: 'top-0 bottom-auto' }" />
+  </div>
 </template>
 
 <style>
