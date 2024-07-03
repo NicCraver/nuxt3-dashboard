@@ -1,6 +1,5 @@
 import type { GPTUser } from '~/types'
-import prisma from '~/lib/prisma';
-import { db } from '~/db'
+
 export function useGptTable() {
     const columns = [
         {
@@ -53,6 +52,7 @@ export function useGptTable() {
 
     // 模拟数据
     const fetchData = async () => {
+       try {
         loading.value = true;
         const data = await $fetch('/api/gpt-user')
         console.log(`data`, JSON.stringify(data))
@@ -65,6 +65,9 @@ export function useGptTable() {
             })
             loading.value = false;
         }, 800);
+       } catch (error) {
+        console.log(`error`,error)
+       }
     }
 
     onMounted(() => {
