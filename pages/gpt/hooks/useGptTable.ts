@@ -52,22 +52,22 @@ export function useGptTable() {
 
     // 模拟数据
     const fetchData = async () => {
-       try {
-        loading.value = true;
-        const data = await $fetch('/api/gpt-user')
-        console.log(`data`, JSON.stringify(data))
-        setTimeout(() => {
-            tableData.value = data
-            toast.add({
-                icon: "i-heroicons-check-circle",
-                color: "primary",
-                title: "查询成功！",
-            })
-            loading.value = false;
-        }, 800);
-       } catch (error) {
-        console.log(`error`,error)
-       }
+    //    try {
+    //     loading.value = true;
+    //     const data = await $fetch('/api/gpt-user')
+    //     console.log(`data`, JSON.stringify(data))
+    //     setTimeout(() => {
+    //         tableData.value = data
+    //         toast.add({
+    //             icon: "i-heroicons-check-circle",
+    //             color: "primary",
+    //             title: "查询成功！",
+    //         })
+    //         loading.value = false;
+    //     }, 800);
+    //    } catch (error) {
+    //     console.log(`error`,error)
+    //    }
     }
 
     onMounted(() => {
