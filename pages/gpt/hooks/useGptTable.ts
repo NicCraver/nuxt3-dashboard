@@ -55,7 +55,7 @@ export function useGptTable() {
     const fetchData = async () => {
         loading.value = true;
         const data = await $fetch('/api/gpt-user')
-        console.log(`data`, data)
+        console.log(`data`, JSON.stringify(data))
         setTimeout(() => {
             tableData.value = data
             toast.add({
