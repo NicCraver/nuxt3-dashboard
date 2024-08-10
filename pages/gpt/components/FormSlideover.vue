@@ -3,6 +3,7 @@ import { z } from "zod";
 import { useClipboard } from "@vueuse/core";
 import type { FormSubmitEvent } from "#ui/types";
 import type { GPTUser } from "~/types";
+import dayjs from "dayjs";
 
 const props = defineProps<{
   close: () => void;
@@ -22,7 +23,7 @@ s
 
   免翻+无限提问+不丢聊天记录+按天充值+对话隔离，全网仅此一家，用过官网版的才知道我的网站有多牛。
 
-  登录地址：https://plus.zhiyunai168.com/（优先使用谷歌浏览器）
+  登录地址：https://gpt4.zhiyungpt.com（优先使用谷歌浏览器）
 
   gpt提示词库 gpts热门推荐‍，网站的详细说明：https://chatdoc.nextdev.cc/guide/guide.html
 
@@ -34,7 +35,7 @@ s
 
 const copywriting2 = ref(
   `
-  登录地址：https://plus.zhiyunai168.com（优先使用谷歌浏览器）
+  登录地址：https://gpt4.zhiyungpt.com（优先使用谷歌浏览器）
 
   gpt提示词库 gpts热门推荐‍，网站的详细说明：https://chatdoc.nextdev.cc/guide/guide.html
 
@@ -70,6 +71,21 @@ const typeOptions = ref(["微信", "B站"]);
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   console.log(event.data);
+  // 读取缓存
+  const data = JSON.parse(localStorage.getItem('tableData') || '')
+  data.filter((el: any) => el.id === event.data.id)[0].name = event.data.name
+  data.filter((el: any) => el.id === event.data.id)[0].state = event.data.state
+  data.filter((el: any) => el.id === event.data.id)[0].type = event.data.type
+  data.filter((el: any) => el.id === event.data.id)[0].updatedAt = dayjs().format('YYYY-MM-DD HH:mm:ss')
+
+  localStorage.setItem('tableData', JSON.stringify(data))
+
+    props.close()
+    props.fetchData()
+    toast.add({ title: '提交成功！' })
+  // props.getTableData()
+  toast.add({ title: '提交成功！' })
+  // props.close();
   // updateUser(event.data).then((res) => {
   //   console.log(`res`, res)
   //   props.close()
@@ -108,37 +124,21 @@ onMounted(() => {
 </script>
 
 <template>
-  <UCard
-    class="flex flex-1 flex-col"
-    :ui="{
-      body: { base: 'flex-1' },
-      ring: '',
-      divide: 'divide-y divide-gray-100 dark:divide-gray-800',
-    }"
-  >
+  <UCard class="flex flex-1 flex-col" :ui="{
+    body: { base: 'flex-1' },
+    ring: '',
+    divide: 'divide-y divide-gray-100 dark:divide-gray-800',
+  }">
     <template #header>
       <div class="flex items-center justify-between">
-        <h3
-          class="text-base text-gray-900 font-semibold leading-6 dark:text-white"
-        >
+        <h3 class="text-base text-gray-900 font-semibold leading-6 dark:text-white">
           Slideover
         </h3>
-        <UButton
-          color="gray"
-          variant="ghost"
-          icon="i-heroicons-x-mark-20-solid"
-          class="-my-1"
-          @click="close"
-        />
+        <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="close" />
       </div>
     </template>
     <div class="h-full">
-      <UForm
-        :schema="schema"
-        :state="state"
-        class="space-y-4"
-        @submit="onSubmit"
-      >
+      <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
         <UFormGroup label="ID" name="id">
           <UInput v-model="state.id" disabled />
         </UFormGroup>

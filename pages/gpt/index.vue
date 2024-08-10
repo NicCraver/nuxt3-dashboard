@@ -53,7 +53,7 @@
 </template>
 
 <script lang="ts" setup>
-import prisma from "~/lib/prisma";
+// import prisma from "~/lib/prisma";
 import { useGptTable } from "./hooks/useGptTable";
 import { useFormSlideover } from "./hooks/useFormSlideover";
 import FormSlideover from "./components/FormSlideover.vue";
@@ -69,10 +69,7 @@ const {
 
 // 表单抽屉
 const { isOpen, close, setFormData, formData, open } = useFormSlideover();
-onMounted(async () => {
-  const user = await $fetch('/api/user-exists')
-  console.log(`user`, user);
-});
+
 </script>
 
 <style lang="scss" scoped></style>

@@ -13,6 +13,7 @@
   "dependencies": {
     "@nuxt/ui": "^2.17.0",
     "@prisma/nuxt": "^0.0.30",
+    "dayjs": "^1.11.12",
     "nuxt": "^3.12.2",
     "vue": "latest"
   },

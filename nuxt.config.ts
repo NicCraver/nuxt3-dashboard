@@ -3,7 +3,6 @@ export default defineNuxtConfig({
   modules: [
     "@nuxt/ui",
     '@vueuse/nuxt',
-    "@prisma/nuxt"
   ],
   devServer: {
     port: 3030,
